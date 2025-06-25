@@ -35,10 +35,10 @@ class Visite extends Model
         return $this->belongsTo(Locataire::class);
     }
 
-    // public function gardien()
-    // {
-    //     return $this->belongsTo(Gardien::class);
-    // }
+    public function gardien()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function getVisiteurNomCompletAttribute()
     {
