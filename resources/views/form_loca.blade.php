@@ -96,14 +96,14 @@
 <body class="min-h-screen">
 
   <!-- En-tête -->
- <header class="bg-white bg-opacity-90 px-6 py-4 flex items-center justify-between header-shadow sticky top-0 z-10">
+  <header class="bg-white bg-opacity-90 px-6 py-4 flex items-center justify-between header-shadow sticky top-0 z-10">
     <div class="flex items-center space-x-3">
       <div class="bg-white p-2 rounded-xl shadow-lg">
         <img src="https://www.neostart.tech/_nuxt/logo.DFn82Mk0.png" alt="Logo Neo Start" class="h-10 transition-transform duration-300 hover:scale-105">
       </div>
       <div>
         <h1 class="text-xl font-bold text-sky-800">Système de gestion des visiteurs</h1>
-        <p class="text-sm text-sky-600">Formulaire de Visite</p>
+        <p class="text-sm text-sky-600">Formulaire des Locataires</p>
       </div>
     </div>
     <div class="flex space-x-4">
@@ -126,95 +126,64 @@
       </a>
     </div>
   </header>
+
   <!-- Contenu principal -->
   <div class="flex items-center justify-center py-10 px-4">
     <div class="bg-white bg-opacity-90 p-8 rounded-2xl w-full max-w-4xl text-gray-800 form-container form-card">
       <div class="text-center mb-8">
-        <h2 class="text-3xl font-bold text-sky-800 section-title">ENREGISTREMENT VISITEUR</h2>
+        <h2 class="text-3xl font-bold text-sky-800 section-title">ENREGISTREMENT LOCATAIRE</h2>
         <p class="mt-2 text-sky-600">Veuillez remplir tous les champs du formulaire</p>
       </div>
 
-      <form class="space-y-6" action="{{ route('visiteurs.store') }}" method="POST">
+      <form class="space-y-6" action="{{ route('locataires.store') }}" method="POST">
         @csrf
-
+               
         <!-- Ligne 1 -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div>
             <label class="block text-sm font-medium text-sky-700 mb-1">Nom</label>
-            <input type="text" placeholder="Nom du visiteur" name="visiteur_nom" class="p-3 rounded-xl w-full border border-gray-300 input-focus focus:outline-none">
+            <input type="text" placeholder="Nom du locataire" name="nom" class="p-3 rounded-xl w-full border border-gray-300 input-focus focus:outline-none">
           </div>
           <div>
             <label class="block text-sm font-medium text-sky-700 mb-1">Prénom</label>
-            <input type="text" placeholder="Prénom du visiteur" name="visiteur_prenom" class="p-3 rounded-xl w-full border border-gray-300 input-focus focus:outline-none">
+            <input type="text" placeholder="Prénom du locataire" name="prenom" class="p-3 rounded-xl w-full border border-gray-300 input-focus focus:outline-none">
           </div>
         </div>
 
         <!-- Ligne 2 -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div>
-            <label class="block text-sm font-medium text-sky-700 mb-1">Téléphone</label>
-            <input type="text" placeholder="Numéro de téléphone" name="visiteur_telephone" class="p-3 rounded-xl w-full border border-gray-300 input-focus focus:outline-none">
+            <label class="block text-sm font-medium text-sky-700 mb-1">Email</label>
+            <input type="text" placeholder="email" name="email" class="p-3 rounded-xl w-full border border-gray-300 input-focus focus:outline-none">
           </div>
           <div>
-            <label class="block text-sm font-medium text-sky-700 mb-1">Motif de la visite</label>
-            <input type="text" placeholder="Raison de la visite" name="motif_visite" class="p-3 rounded-xl w-full border border-gray-300 input-focus focus:outline-none">
+            <label class="block text-sm font-medium text-sky-700 mb-1">Telephone</label>
+            <input type="text" placeholder="telephone" name="telephone" class="p-3 rounded-xl w-full border border-gray-300 input-focus focus:outline-none">
           </div>
         </div>
 
         <!-- Ligne 3 -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div>
-            <label class="block text-sm font-medium text-sky-700 mb-1">Type de pièce d'identité</label>
-            <input type="text" placeholder="Carte d'identité, passeport..." name="visiteur_piece_identite" class="p-3 rounded-xl w-full border border-gray-300 input-focus focus:outline-none">
+            <label class="block text-sm font-medium text-sky-700 mb-1">Appartement</label>
+            <input type="text" placeholder="Numero Appartement" name="appartement" class="p-3 rounded-xl w-full border border-gray-300 input-focus focus:outline-none">
           </div>
           <div>
-            <label class="block text-sm font-medium text-sky-700 mb-1">Numéro de la pièce</label>
-            <input type="text" placeholder="Numéro du document" name="visiteur_numero_piece" class="p-3 rounded-xl w-full border border-gray-300 input-focus focus:outline-none">
+            <label class="block text-sm font-medium text-sky-700 mb-1">Etage</label>
+            <input type="text" placeholder="Etage" name="etage" class="p-3 rounded-xl w-full border border-gray-300 input-focus focus:outline-none">
           </div>
         </div>
 
         <!-- Ligne 4 -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="grid grid-cols-1 md:grid-cols-1 gap-5">
           <div>
-            <label class="block text-sm font-medium text-sky-700 mb-1">Heure d'entrée</label>
-            <input type="time" name="heure_entree" class="p-3 rounded-xl w-full border border-gray-300 input-focus focus:outline-none">
+            <label class="block text-sm font-medium text-sky-700 mb-1">Actif</label>
+            <input type="text" name="actif" class="p-3 rounded-xl w-full border border-gray-300 input-focus focus:outline-none">
           </div>
-          <div>
-            <label class="block text-sm font-medium text-sky-700 mb-1">Heure de sortie</label>
-            <input type="time" name="heure_sortie" class="p-3 rounded-xl w-full border border-gray-300 input-focus focus:outline-none">
-          </div>
+         
         </div>
 
-        <!-- Ligne 5 -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-          <div>
-            <label class="block text-sm font-medium text-sky-700 mb-1">Statut</label>
-            <select name="statut" class="p-3 rounded-xl w-full border border-gray-300 input-focus focus:outline-none">
-              <option value="">Sélectionnez un statut</option>
-              <option value="en attente">En attente</option>
-              <option value="validé">Validé</option>
-              <option value="refusé">En cours</option>
-               <option value="refusé">Refusé</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-sky-700 mb-1">Observations</label>
-            <input type="text" placeholder="Notes supplémentaires" name="observations" class="p-3 rounded-xl w-full border border-gray-300 input-focus focus:outline-none">
-          </div>
-        </div>
-
-        <!-- Ligne 6 -->
-        <div class="grid grid-cols-1 gap-5">
-          <div>
-            <label class="block text-sm font-medium text-sky-700 mb-1">Locataire</label>
-            <select name="locataire_id" class="p-3 rounded-xl w-full border border-gray-300 input-focus focus:outline-none" required>
-              <option value="">-- Sélectionner un locataire --</option>
-              @foreach($locataires as $locataire)
-                <option value="{{ $locataire->id }}">{{ $locataire->nom }} {{ $locataire->prenom }}</option>
-              @endforeach
-            </select>
-          </div>
-        </div>
+      
 
         <!-- Bouton -->
         <div class="text-center mt-8">

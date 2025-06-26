@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Liste des Visiteurs</title>
+  <title>Historique des Visites</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -14,6 +14,8 @@
       background-size: 400% 400%;
       animation: gradientBG 15s ease infinite;
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
     
     @keyframes gradientBG {
@@ -134,18 +136,87 @@
       border-left: 4px solid #10b981;
       backdrop-filter: blur(5px);
     }
+    
+    .badge-en-cours {
+      background-color: #fef3c7;
+      color: #d97706;
+    }
+    
+    .badge-termine {
+      background-color: #d1fae5;
+      color: #047857;
+    }
+    
+    .back-btn {
+      background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+      color: white;
+      padding: 0.6rem 1.2rem;
+      border-radius: 0.75rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 8px rgba(2, 132, 199, 0.2);
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+    }
+    
+    .back-btn:hover {
+      background: linear-gradient(135deg, #0ea5e9, #0284c7);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(2, 132, 199, 0.3);
+    }
+    
+    .back-btn:active {
+      transform: translateY(0);
+    }
+    
+    .locataire-card {
+      background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(2, 132, 199, 0.08));
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 10px 25px rgba(2, 132, 199, 0.1);
+      border: 1px solid rgba(2, 132, 199, 0.15);
+    }
+    
+    .locataire-info {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+    
+    .info-item {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .info-label {
+      font-size: 0.75rem;
+      color: #0c4a6e;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+    
+    .info-value {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #0369a1;
+    }
   </style>
 </head>
 
 <body>
- <header class="bg-white bg-opacity-90 px-6 py-4 flex items-center justify-between header-shadow sticky top-0 z-10">
+  <header class="bg-white bg-opacity-90 px-6 py-4 flex items-center justify-between header-shadow sticky top-0 z-10">
     <div class="flex items-center space-x-3">
       <div class="bg-white p-2 rounded-xl shadow-lg">
         <img src="https://www.neostart.tech/_nuxt/logo.DFn82Mk0.png" alt="Logo Neo Start" class="h-10 transition-transform duration-300 hover:scale-105">
       </div>
       <div>
         <h1 class="text-xl font-bold text-sky-800">Système de gestion des visiteurs</h1>
-        <p class="text-sm text-sky-600">Liste des Visites</p>
+        <p class="text-sm text-sky-600">Historique des visites</p>
       </div>
     </div>
     <div class="flex space-x-4">
@@ -169,82 +240,107 @@
     </div>
   </header>
 
-  <main class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+  <main class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 flex-1">
     <div class="table-container card-shadow">
       <div class="px-6 py-5 border-b border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-sky-50 bg-opacity-50">
         <div>
-          <h1 class="text-2xl font-bold text-sky-800 section-title">Gestion des Visiteurs</h1>
-          <p class="text-sm text-sky-600 mt-2">Suivi des visiteurs en temps réel</p>
+          <h1 class="text-2xl font-bold text-sky-800 section-title">Historique des Visites</h1>
+          <p class="text-sm text-sky-600 mt-2">Suivi des visites pour le locataire</p>
         </div>
-        <div class="relative w-full sm:w-auto">
-          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <i class="fas fa-search text-sky-500"></i>
-          </div>
-          <input type="text" placeholder="Rechercher un visiteur..." class="pl-10 pr-4 py-2.5 rounded-xl focus:ring-0 outline-none transition search-input w-full">
-        </div>
+        <a href="{{ route('locataires.index') }}" class="back-btn">
+          <i class="fas fa-arrow-left"></i>
+          Retour aux locataires
+        </a>
       </div>
 
-      @if(session('success'))
-        <div class="success-alert p-4 mx-6 mt-4 rounded-md">
-          <div class="flex items-center">
-            <div class="flex-shrink-0">
-              <svg class="h-5 w-5 text-green-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-              </svg>
+      <div class="px-6 py-4">
+        <div class="locataire-card">
+          <div class="locataire-info">
+            <div class="info-item">
+              <span class="info-label">Nom</span>
+              <span class="info-value">{{ $locataire->nom }}</span>
             </div>
-            <div class="ml-3">
-              <p class="text-sm text-green-800 font-medium">{{ session('success') }}</p>
+            <div class="info-item">
+              <span class="info-label">Prénom</span>
+              <span class="info-value">{{ $locataire->prenom }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Email</span>
+              <span class="info-value">{{ $locataire->email }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Téléphone</span>
+              <span class="info-value">{{ $locataire->telephone }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Appartement</span>
+              <span class="info-value">{{ $locataire->appartement }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Étage</span>
+              <span class="info-value">{{ $locataire->etage }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Statut</span>
+              <span class="info-value">
+                @if($locataire->actif)
+                  <span class="px-2 py-1 rounded-full bg-green-100 text-green-800 text-xs">Actif</span>
+                @else
+                  <span class="px-2 py-1 rounded-full bg-red-100 text-red-800 text-xs">Inactif</span>
+                @endif
+              </span>
             </div>
           </div>
         </div>
-      @endif
+      </div>
 
       <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200">
           <thead>
             <tr>
-              <th scope="col" class="px-6 py-4 text-left text-xs font-medium tracking-wider table-header">Nom</th>
-              <th scope="col" class="px-6 py-4 text-left text-xs font-medium tracking-wider table-header">Prénom</th>
+              <th scope="col" class="px-6 py-4 text-left text-xs font-medium tracking-wider table-header">Visiteur</th>
               <th scope="col" class="px-6 py-4 text-left text-xs font-medium tracking-wider table-header">Téléphone</th>
-              <th scope="col" class="px-6 py-4 text-left text-xs font-medium tracking-wider table-header">Pièce</th>
-              <th scope="col" class="px-6 py-4 text-left text-xs font-medium tracking-wider table-header">N° Pièce</th>
+              <th scope="col" class="px-6 py-4 text-left text-xs font-medium tracking-wider table-header">Pièce d'identité</th>
               <th scope="col" class="px-6 py-4 text-left text-xs font-medium tracking-wider table-header">Motif</th>
-              <th scope="col" class="px-6 py-4 text-left text-xs font-medium tracking-wider table-header">Entrée</th>
-              <th scope="col" class="px-6 py-4 text-left text-xs font-medium tracking-wider table-header">Sortie</th>
+              <th scope="col" class="px-6 py-4 text-left text-xs font-medium tracking-wider table-header">Heure entrée</th>
+              <th scope="col" class="px-6 py-4 text-left text-xs font-medium tracking-wider table-header">Heure sortie</th>
               <th scope="col" class="px-6 py-4 text-left text-xs font-medium tracking-wider table-header">Statut</th>
-              <th scope="col" class="px-6 py-4 text-left text-xs font-medium tracking-wider table-header">Locataire</th>
-              <th scope="col" class="px-6 py-4 text-left text-xs font-medium tracking-wider table-header">Observations</th>
-              <th scope="col" class="px-6 py-4 text-right text-xs font-medium tracking-wider table-header">Actions</th>
             </tr>
           </thead>
           <tbody>
-            @foreach($visiteurs as $visiteur)
+            @foreach($locataire->visites as $visite)
             <tr class="table-row">
-              <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-sky-800">{{ $visiteur->visiteur_nom }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-sky-700">{{ $visiteur->visiteur_prenom }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-sky-600">{{ $visiteur->visiteur_telephone }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-sky-600">{{ $visiteur->visiteur_piece_identite }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-sky-600">{{ $visiteur->visiteur_numero_piece }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-sky-600">{{ $visiteur->motif_visite }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-sky-700">{{ $visiteur->heure_entree }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-sky-700">{{ $visiteur->heure_sortie }}</td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <span class="status-badge 
-                  {{ $visiteur->statut === 'En attente' ? 'bg-amber-100 text-amber-800' : 
-                     ($visiteur->statut === 'validé' ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800') }}">
-                  {{ $visiteur->statut }}
-                </span>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-sky-800">
+                {{ $visite->visiteur_prenom }} {{ $visite->visiteur_nom }}
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-sky-600">{{ $visiteur->locataire->nom }} {{ $visiteur->locataire->prenom }}</td>
-              <td class="px-6 py-4 text-sm text-sky-600 max-w-xs">{{ $visiteur->observations }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <form action="{{ route('visiteurs.valider', $visiteur->id) }}" method="POST" onsubmit="return confirm('Valider cette visite ?')">
-                  @csrf
-                  @method('PUT')
-                  <button type="submit" class="text-white bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 px-4 py-2 font-medium action-button">
-                    <i class="fas fa-check-circle mr-2"></i>Valider
-                  </button>
-                </form>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-sky-700">
+                {{ $visite->visiteur_telephone }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-sky-600">
+                <span class="font-medium">{{ $visite->visiteur_piece_identite }}:</span> 
+                {{ $visite->visiteur_numero_piece }}
+              </td>
+              <td class="px-6 py-4 text-sm text-sky-600">
+                {{ $visite->motif_visite }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-sky-600">
+                {{ \Carbon\Carbon::parse($visite->heure_entree)->format('d/m/Y H:i') }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-sky-600">
+                @if($visite->heure_sortie)
+                  {{ \Carbon\Carbon::parse($visite->heure_sortie)->format('d/m/Y H:i') }}
+                @else
+                  <span class="text-red-500 font-medium">En cours</span>
+                @endif
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                @if($visite->statut === 'en_cours')
+                  <span class="badge-en-cours px-2 py-1 rounded-full text-xs font-medium">En cours</span>
+                @elseif($visite->statut === 'termine')
+                  <span class="badge-termine px-2 py-1 rounded-full text-xs font-medium">Terminé</span>
+                @else
+                  <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-xs font-medium">{{ $visite->statut }}</span>
+                @endif
               </td>
             </tr>
             @endforeach
@@ -254,7 +350,7 @@
 
       <div class="px-6 py-4 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-4 bg-sky-50 bg-opacity-50">
         <div class="text-sm text-sky-700">
-          <i class="fas fa-users mr-2"></i>Affichage de <span class="font-bold">1</span> à <span class="font-bold">10</span> sur <span class="font-bold">{{ count($visiteurs) }}</span> résultats
+          <i class="fas fa-history mr-2"></i>Historique de <span class="font-bold">{{ count($locataire->visites) }}</span> visites
         </div>
         <div class="flex space-x-2">
           <button class="px-4 py-2 text-sm font-medium text-sky-700 pagination-btn">

@@ -6,6 +6,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+ use Illuminate\Notifications\Notifiable;
+
+
 
 class Locataire extends Model
 {
@@ -40,6 +43,8 @@ class Locataire extends Model
         return 'Appartement ' . $this->appartement . 
                ($this->etage ? ' - Étage ' . $this->etage : '');
     }
+
+      use Notifiable; // <= AJOUTE cette ligne
 }
 
 

@@ -62,4 +62,6 @@ class Visite extends Model
     {
         return $query->where('statut', 'terminee');
     }
+
+    
 }
