@@ -256,6 +256,21 @@
       <div class="px-6 py-4">
         <div class="locataire-card">
           <div class="locataire-info">
+             <div class="info-item">
+  <span class="info-label">Profil</span>
+  @if($locataire->photo)
+    <img src="{{ asset('storage/' . $locataire->photo) }}" 
+         alt="Photo de profil"
+         class="w-16 h-16 rounded-full object-cover border border-sky-300 shadow mt-1">
+  @else
+    <div class="w-16 h-16 rounded-full bg-sky-100 flex items-center justify-center
+                text-sky-700 font-semibold text-base border border-sky-300 shadow mt-1">
+      {{ strtoupper(substr($locataire->nom, 0, 1)) }}
+    </div>
+  @endif
+</div>
+
+
             <div class="info-item">
               <span class="info-label">Nom</span>
               <span class="info-value">{{ $locataire->nom }}</span>
@@ -298,6 +313,7 @@
         <table class="min-w-full divide-y divide-gray-200">
           <thead>
             <tr>
+              <th scope="col" class="px-6 py-4 text-left text-xs font-medium tracking-wider table-header">Profil</th>
               <th scope="col" class="px-6 py-4 text-left text-xs font-medium tracking-wider table-header">Visiteur</th>
               <th scope="col" class="px-6 py-4 text-left text-xs font-medium tracking-wider table-header">Téléphone</th>
               <th scope="col" class="px-6 py-4 text-left text-xs font-medium tracking-wider table-header">Pièce d'identité</th>
@@ -310,6 +326,15 @@
           <tbody>
             @foreach($locataire->visites as $visite)
             <tr class="table-row">
+     <td class="px-6 py-4 whitespace-nowrap">
+  @if($visite->photo)
+    <img src="{{ asset('storage/' . $visite->photo) }}" alt="Photo" class="w-10 h-10 rounded-full object-cover border border-sky-300 shadow-md">
+  @else
+    <div class="w-10 h-10 rounded-full bg-sky-100 flex items-center justify-center text-sky-500 font-bold">
+      {{ strtoupper(substr($visite->visiteur_nom, 0, 1)) }}
+    </div>
+  @endif
+</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-sky-800">
                 {{ $visite->visiteur_prenom }} {{ $visite->visiteur_nom }}
               </td>

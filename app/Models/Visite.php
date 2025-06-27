@@ -23,6 +23,7 @@ class Visite extends Model
         'locataire_id',
         'gardien_id',
         'observations',
+        'photo',
     ];
 
     protected $casts = [

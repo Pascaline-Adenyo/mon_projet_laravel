@@ -9,6 +9,8 @@
 // });
 use App\Http\Controllers\AuthController;
 
+use App\Models\Locataire;
+
 Route::get('/authentification', function () {
     return view('authentification');
 })->name('login');
@@ -37,17 +39,41 @@ Route::post('/locataires', [LocataireController::class, 'store'])->name('locatai
 Route::get('/locataires', [LocataireController::class, 'index'])->name('locataires.index');
 
 
+
+
+Route::get('/notifications', function () {
+    $locataire = \App\Models\Locataire::first();
+    return view('notifications', compact('locataire'));
+})->name('notifications');
+
+
+
+
 Route::get('/locataire/historique/{id}', [LocataireController::class, 'historique'])
      ->name('locataire.historique');
 
 
      Route::get('/locataire/visites/{id}', [VisiteurController::class, 'afficherVisite'])->name('locataire.visite');
-Route::put('/locataire/visites/{id}/confirmer', [VisiteurController::class, 'confirmer'])->name('visite.confirmer');
-Route::put('/locataire/visites/{id}/refuser', [VisiteurController::class, 'refuser'])->name('visite.refuser');
+     Route::get('/locataire/visites/{id}', [App\Http\Controllers\VisiteurController::class, 'voirVisite'])->name('visite.voir');
 
-Route::get('/test-notif', function () {
-    return view('test_notif');
-});
+     Route::put('/visites/{id}/confirmer', [VisiteurController::class, 'confirmer'])->name('visite.confirmer');
+Route::put('/visites/{id}/refuser', [VisiteurController::class, 'refuser'])->name('visite.refuser');
+Route::put('/visites/{id}/bannir', [VisiteurController::class, 'bannir'])->name('visite.bannir');
+Route::get('/notifications/{id}', [VisiteurController::class, 'notifications'])->name('notifications.show');
+Route::get('/home', function () {
+    return view('home');
+})->name('home');
+Route::redirect('/', '/home');
+
+
+
+
+
+
+
+
+
+
 
 
 

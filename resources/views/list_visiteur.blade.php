@@ -198,11 +198,23 @@
           </div>
         </div>
       @endif
+      <!-- Filtre par statut -->
+<form method="GET" action="{{ url('/visiteurs') }}" class="flex flex-col sm:flex-row items-center gap-3 px-6 py-4 bg-white border-b border-gray-200">
+  <label for="filtre_statut" class="text-sky-700 font-medium">Filtrer par statut :</label>
+  <select name="statut" id="filtre_statut" onchange="this.form.submit()" class="rounded-lg px-4 py-2 border border-gray-300 text-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-300">
+      <option value="">-- Tous --</option>
+      <option value="en attente" {{ request('statut') == 'en attente' ? 'selected' : '' }}>En attente</option>
+      <option value="validé" {{ request('statut') == 'validé' ? 'selected' : '' }}>Validé</option>
+      <option value="refusé" {{ request('statut') == 'refusé' ? 'selected' : '' }}>Refusé</option>
+      <option value="bannie" {{ request('statut') == 'bannie' ? 'selected' : '' }}>Banni</option>
+  </select>
+</form>
 
       <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200">
           <thead>
             <tr>
+              <th scope="col" class="px-6 py-4 text-left text-xs font-medium tracking-wider table-header">Profil</th>
               <th scope="col" class="px-6 py-4 text-left text-xs font-medium tracking-wider table-header">Nom</th>
               <th scope="col" class="px-6 py-4 text-left text-xs font-medium tracking-wider table-header">Prénom</th>
               <th scope="col" class="px-6 py-4 text-left text-xs font-medium tracking-wider table-header">Téléphone</th>
@@ -220,6 +232,15 @@
           <tbody>
             @foreach($visiteurs as $visiteur)
             <tr class="table-row">
+              <td class="px-6 py-4 whitespace-nowrap">
+  @if($visiteur->photo)
+    <img src="{{ asset('storage/' . $visiteur->photo) }}" alt="Photo" class="w-10 h-10 rounded-full object-cover border border-sky-300 shadow-md">
+  @else
+    <div class="w-10 h-10 rounded-full bg-sky-100 flex items-center justify-center text-sky-500 font-bold">
+      {{ strtoupper(substr($visiteur->visiteur_nom, 0, 1)) }}
+    </div>
+  @endif
+</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-sky-800">{{ $visiteur->visiteur_nom }}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-sky-700">{{ $visiteur->visiteur_prenom }}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-sky-600">{{ $visiteur->visiteur_telephone }}</td>
@@ -246,6 +267,12 @@
                   </button>
                 </form>
               </td>
+              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
+    
+                
+    
+</td>
+
             </tr>
             @endforeach
           </tbody>

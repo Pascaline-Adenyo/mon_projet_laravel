@@ -22,6 +22,8 @@ class Locataire extends Model
         'appartement',
         'etage',
         'actif',
+        'photo',
+        'password',
     ];
 
     protected $casts = [

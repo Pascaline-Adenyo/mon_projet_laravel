@@ -227,6 +227,8 @@
         <table class="min-w-full divide-y divide-gray-200">
           <thead>
             <tr>
+              <th scope="col" class="px-6 py-4 text-left text-xs font-medium tracking-wider table-header">Profil</th>
+
               <th scope="col" class="px-6 py-4 text-left text-xs font-medium tracking-wider table-header">Nom</th>
               <th scope="col" class="px-6 py-4 text-left text-xs font-medium tracking-wider table-header">Prénom</th>
               <th scope="col" class="px-6 py-4 text-left text-xs font-medium tracking-wider table-header">Email</th>
@@ -235,11 +237,22 @@
               <th scope="col" class="px-6 py-4 text-left text-xs font-medium tracking-wider table-header">Etage</th>
               <th scope="col" class="px-6 py-4 text-left text-xs font-medium tracking-wider table-header">Actif</th>
               <th scope="col" class="px-6 py-4 text-left text-xs font-medium tracking-wider table-header">Actions</th> <!-- Nouvelle colonne pour les actions -->
+              
             </tr>
           </thead>
           <tbody>
             @foreach($locataires as $locataire)
             <tr class="table-row">
+              <td class="px-6 py-4 whitespace-nowrap">
+  @if($locataire->photo)
+    <img src="{{ asset('storage/' . $locataire->photo) }}" alt="Photo" class="w-10 h-10 rounded-full object-cover border border-sky-300 shadow-md">
+  @else
+    <div class="w-10 h-10 rounded-full bg-sky-100 flex items-center justify-center text-sky-500 font-bold">
+      {{ strtoupper(substr($locataire->nom, 0, 1)) }}
+    </div>
+  @endif
+</td>
+
               <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-sky-800">{{ $locataire->nom }}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-sky-700">{{ $locataire->prenom }}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-sky-600">{{ $locataire->email }}</td>
