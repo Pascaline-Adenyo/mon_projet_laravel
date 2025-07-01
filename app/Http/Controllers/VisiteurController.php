@@ -8,8 +8,10 @@ use Illuminate\Http\Request;
 use App\Models\Locataire;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+
+use Illuminate\Support\Facades\Storage;
   
-   use App\Notifications\VisiteANotifier; 
+use App\Notifications\VisiteANotifier; 
    
 
 class VisiteurController extends Controller
@@ -158,6 +160,77 @@ public function valider($id)
 
 
 
+
+public function edit($id)
+{
+    $visiteur = Visite::findOrFail($id); 
+    $locataires = Locataire::all(); 
+    return view('edit', compact('visiteur', 'locataires'));
+}
+
+
+
+public function destroy(Visite $visiteur)
+{
+    $visiteur->delete();
+    return redirect()->route('visiteurs.index')
+        ->with('success', 'Visiteur supprimé avec succès');
+}
+
+
+public function update(Request $request, $id)
+{
+    $visiteur = Visite::findOrFail($id);
+
+    // Valider les données reçues
+    $validated = $request->validate([
+        'visiteur_nom' => 'required|string|max:255',
+        'visiteur_prenom' => 'required|string|max:255',
+        'visiteur_telephone' => 'required|string|max:20',
+        'visiteur_piece_identite' => 'required|string|max:50',
+        'visiteur_numero_piece' => 'required|string|max:100',
+        'motif_visite' => 'required|string|max:255',
+        'heure_entree' => 'required|date',
+        'heure_sortie' => 'nullable|date',
+        'statut' => 'required|string|in:En cours,Terminé,Annulé',
+        'locataire_id' => 'required|exists:locataires,id',
+        'observations' => 'nullable|string',
+        'photo' => 'nullable|image|max:2048',
+    ]);
+
+    // Gestion de la photo si nouvelle
+    if ($request->hasFile('photo')) {
+        // Supprimer l'ancienne photo si elle existe
+        if ($visiteur->photo) {
+            Storage::disk('public')->delete($visiteur->photo);
+        }
+
+        // Stocker la nouvelle photo
+        $photoPath = $request->file('photo')->store('photos/visiteurs', 'public');
+    } else {
+        // Conserver l’ancienne photo
+        $photoPath = $visiteur->photo;
+    }
+
+    // Mise à jour des champs
+    $visiteur->update([
+        'visiteur_nom' => $request->visiteur_nom,
+        'visiteur_prenom' => $request->visiteur_prenom,
+        'visiteur_telephone' => $request->visiteur_telephone,
+        'visiteur_piece_identite' => $request->visiteur_piece_identite,
+        'visiteur_numero_piece' => $request->visiteur_numero_piece,
+        'motif_visite' => $request->motif_visite,
+        'heure_entree' => $request->heure_entree,
+        'heure_sortie' => $request->heure_sortie,
+        'statut' => $request->statut,
+        'locataire_id' => $request->locataire_id,
+        'gardien_id' => Auth::user()->id,
+        'observations' => $request->observations,
+        'photo' => $photoPath,
+    ]);
+
+    return redirect()->route('admin.visit')->with('success', 'Visite mise à jour avec succès.');
+}
 
 
 }

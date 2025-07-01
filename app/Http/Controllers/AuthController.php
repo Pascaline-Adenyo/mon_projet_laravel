@@ -8,27 +8,40 @@ use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller
 {
     public function login(Request $request)
-    {
-        // Validation des données
-        $request->validate([
-            'email' => 'required|string',
-            'password' => 'required|string',
-        ]);
+{
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+        'user_type' => 'required|string', // Très important !
+    ]);
 
-        $credentials = [
-            'email' => $request->email,
-            'password' => $request->password,
-        ];
+    $credentials = [
+        'email' => $request->email,
+        'password' => $request->password,
+        'type' => $request->user_type, // Vérifie que le type correspond bien
+    ];
+           
 
-        // Authentification
-        if (Auth::attempt($credentials)) {
-            return redirect()->route('accueil');
+    if (Auth::attempt($credentials, $request->filled('remember'))) {
+        $request->session()->regenerate();
+
+        if ($request->user_type === 'gardien') {
+            return redirect()->route('home');
+        } elseif ($request->user_type === 'locataire') {
+            return redirect()->route('locataire_home');
+        } elseif ($request->user_type === 'admin') {
+            return redirect()->route('admin_home'); 
+        } else {
+            return redirect()->route('default_dashboard');
         }
-
-        // Retour avec erreur
-        return back()->withErrors([
-            'email' => 'Nom d’utilisateur ou mot de passe incorrect.',
-        ]);
     }
+
+    return back()->with('error', 'Email, mot de passe ou rôle incorrect.');
+}
+
+    
+
+
+
     
 }

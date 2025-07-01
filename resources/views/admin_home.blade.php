@@ -35,12 +35,17 @@
         
         <div class="py-6 px-4">
             <nav class="space-y-2">
+                 <a href="{{ route('locataires.create') }}" class="flex items-center p-3 rounded-lg hover:bg-sky-700 transition-all group">
+                    <i class="fas fa-user-plus mr-3 text-sky-400 group-hover:text-white"></i>
+                    <span class="group-hover:text-white">Ajouter un locataire</span>
+                </a>
+               
                 <a href="{{ url('/accueil') }}" class="flex items-center p-3 rounded-lg hover:bg-sky-700 transition-all group">
                     <i class="fas fa-home mr-3 text-sky-400 group-hover:text-white"></i>
                     <span class="group-hover:text-white">Ajouter visite</span>
                 </a>
-                
-                <a href="{{ url('/visiteurs') }}" class="flex items-center p-3 rounded-lg hover:bg-sky-700 transition-all group">
+               
+                <a href="{{ url('/admin/visites') }}" class="flex items-center p-3 rounded-lg hover:bg-sky-700 transition-all group">
                     <i class="fas fa-list mr-3 text-sky-400 group-hover:text-white"></i>
                     <span class="group-hover:text-white">Liste des visiteurs</span>
                 </a>

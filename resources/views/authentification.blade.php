@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -90,7 +89,7 @@
       backdrop-filter: blur(5px);
     }
     
-    input:focus {
+    input:focus, select:focus {
       box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.3);
     }
     
@@ -101,6 +100,27 @@
     input:focus::placeholder {
       transform: translateX(5px);
       opacity: 0.7;
+    }
+    
+    .user-type-selector {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(203, 213, 225, 0.4);
+      border-radius: 0.75rem;
+      padding-left: 2.5rem;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2338bdf8' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 0.75rem center;
+      background-size: 1.5em 1.5em;
+    }
+    
+    .user-type-icon {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #0ea5e9;
     }
   </style>
 </head>
@@ -174,6 +194,22 @@
               <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
             @enderror
           </div>
+          
+          <!-- Nouveau champ pour sélectionner le type d'utilisateur -->
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i class="fas fa-user-tag text-sky-500"></i>
+            </div>
+            <select name="user_type" class="w-full pl-10 pr-10 py-2.5 rounded-xl focus:ring-0 outline-none user-type-selector">
+              <option value="">Sélectionnez votre rôle</option>
+              <option value="locataire">Locataire</option>
+              <option value="gardien">Gardien</option>
+              <option value="admin">Administrateur</option>
+            </select>
+            @error('user_type')
+              <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+            @enderror
+          </div>
 
           <div class="flex items-center justify-between">
             <div class="flex items-center">
@@ -234,6 +270,29 @@
         form.classList.add('transition-all', 'duration-500', 'ease-out');
         form.classList.remove('opacity-0', '-translate-y-4');
       }, 100);
+      
+      // Animation au survol des options
+      const options = document.querySelectorAll('option');
+      options.forEach(option => {
+        option.addEventListener('mouseover', function() {
+          this.style.backgroundColor = '#e0f2fe';
+        });
+        option.addEventListener('mouseout', function() {
+          this.style.backgroundColor = '';
+        });
+      });
+      
+      // Mise en évidence visuelle de la sélection
+      const select = document.querySelector('select[name="user_type"]');
+      select.addEventListener('change', function() {
+        if(this.value) {
+          this.style.backgroundColor = '#f0f9ff';
+          this.style.borderColor = '#7dd3fc';
+        } else {
+          this.style.backgroundColor = '';
+          this.style.borderColor = '';
+        }
+      });
     });
   </script>
 </body>

@@ -150,7 +150,7 @@
     </div>
     <div class="flex space-x-4">
      
-      <a href="{{ url('/home') }}" class="flex items-center text-sky-700 font-medium hover:text-sky-900 transition-colors group">
+      <a href="{{ url('/admin') }}" class="flex items-center text-sky-700 font-medium hover:text-sky-900 transition-colors group">
         <span class="mr-1 group-hover:underline">Accueil</span>
         <i class="fas fa-home text-sky-600"></i>
       </a>
@@ -248,14 +248,31 @@
               <td class="px-6 py-4 whitespace-nowrap text-sm text-sky-600">{{ $visiteur->locataire->nom }} {{ $visiteur->locataire->prenom }}</td>
               <td class="px-6 py-4 text-sm text-sky-600 max-w-xs">{{ $visiteur->observations }}</td>
               <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <form action="{{ route('visiteurs.valider', $visiteur->id) }}" method="POST" onsubmit="return confirm('Valider cette visite ?')">
-                  @csrf
-                  @method('PUT')
-                  <button type="submit" class="text-white bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 px-4 py-2 font-medium action-button">
-                    <i class="fas fa-check-circle mr-2"></i>Valider
-                  </button>
-                </form>
-              </td>
+  <div class="flex justify-end space-x-2">
+    <!-- Bouton Valider -->
+    <form action="{{ route('visiteurs.valider', $visiteur->id) }}" method="POST" onsubmit="return confirm('Valider cette visite ?')">
+      @csrf
+      @method('PUT')
+      <button type="submit" class="text-white bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 px-3 py-1.5 rounded-lg font-medium action-button">
+        <i class="fas fa-check-circle mr-1"></i>Valider
+      </button>
+    </form>
+    
+    <!-- Bouton Éditer -->
+    <a href="{{ route('visiteurs.edit', $visiteur->id) }}" class="text-white bg-gradient-to-r from-sky-500 to-sky-600 hover:from-sky-600 hover:to-sky-700 px-3 py-1.5 rounded-lg font-medium action-button">
+      <i class="fas fa-edit mr-1"></i>Modifier
+    </a>
+    
+    <!-- Bouton Supprimer -->
+    <form action="{{ route('visiteurs.destroy', $visiteur->id) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce visiteur ?');">
+      @csrf
+      @method('DELETE')
+      <button type="submit" class="text-white bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 px-3 py-1.5 rounded-lg font-medium action-button">
+        <i class="fas fa-trash-alt mr-1"></i>Supprimer
+      </button>
+    </form>
+  </div>
+</td>
               <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
     
                 

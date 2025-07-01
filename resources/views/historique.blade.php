@@ -205,6 +205,70 @@
       font-weight: 500;
       color: #0369a1;
     }
+    
+    /* Modal pour afficher la photo en grand */
+    .photo-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .photo-modal.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .modal-content {
+      max-width: 90%;
+      max-height: 90%;
+      transform: scale(0.8);
+      transition: transform 0.3s ease;
+    }
+    
+    .photo-modal.active .modal-content {
+      transform: scale(1);
+    }
+    
+    .close-modal {
+      position: absolute;
+      top: 30px;
+      right: 30px;
+      color: white;
+      font-size: 2rem;
+      cursor: pointer;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+    
+    .close-modal:hover {
+      background: rgba(255,255,255,0.2);
+      transform: rotate(90deg);
+    }
+    
+    .clickable-photo {
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    
+    .clickable-photo:hover {
+      transform: scale(1.05);
+    }
   </style>
 </head>
 
@@ -220,7 +284,6 @@
       </div>
     </div>
     <div class="flex space-x-4">
-     
       <a href="{{ url('/accueil') }}" class="flex items-center text-sky-700 font-medium hover:text-sky-900 transition-colors group">
         <span class="mr-1 group-hover:underline">Ajouter visite</span>
         <i class="fas fa-home text-sky-600"></i>
@@ -256,21 +319,21 @@
       <div class="px-6 py-4">
         <div class="locataire-card">
           <div class="locataire-info">
-             <div class="info-item">
-  <span class="info-label">Profil</span>
-  @if($locataire->photo)
-    <img src="{{ asset('storage/' . $locataire->photo) }}" 
-         alt="Photo de profil"
-         class="w-16 h-16 rounded-full object-cover border border-sky-300 shadow mt-1">
-  @else
-    <div class="w-16 h-16 rounded-full bg-sky-100 flex items-center justify-center
-                text-sky-700 font-semibold text-base border border-sky-300 shadow mt-1">
-      {{ strtoupper(substr($locataire->nom, 0, 1)) }}
-    </div>
-  @endif
-</div>
-
-
+            <div class="info-item">
+              <span class="info-label">Profil</span>
+              @if($locataire->photo)
+                <img src="{{ asset('storage/' . $locataire->photo) }}" 
+                     alt="Photo de profil"
+                     class="w-16 h-16 rounded-full object-cover border border-sky-300 shadow mt-1 clickable-photo"
+                     onclick="openPhotoModal('{{ asset('storage/' . $locataire->photo) }}', '{{ $locataire->nom }}')">
+              @else
+                <div class="w-16 h-16 rounded-full bg-sky-100 flex items-center justify-center
+                            text-sky-700 font-semibold text-base border border-sky-300 shadow mt-1 clickable-photo"
+                     onclick="openPhotoModal(null, '{{ $locataire->nom }}')">
+                  {{ strtoupper(substr($locataire->nom, 0, 1)) }}
+                </div>
+              @endif
+            </div>
             <div class="info-item">
               <span class="info-label">Nom</span>
               <span class="info-value">{{ $locataire->nom }}</span>
@@ -326,15 +389,19 @@
           <tbody>
             @foreach($locataire->visites as $visite)
             <tr class="table-row">
-     <td class="px-6 py-4 whitespace-nowrap">
-  @if($visite->photo)
-    <img src="{{ asset('storage/' . $visite->photo) }}" alt="Photo" class="w-10 h-10 rounded-full object-cover border border-sky-300 shadow-md">
-  @else
-    <div class="w-10 h-10 rounded-full bg-sky-100 flex items-center justify-center text-sky-500 font-bold">
-      {{ strtoupper(substr($visite->visiteur_nom, 0, 1)) }}
-    </div>
-  @endif
-</td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                @if($visite->photo)
+                  <img src="{{ asset('storage/' . $visite->photo) }}" 
+                       alt="Photo du visiteur" 
+                       class="w-10 h-10 rounded-full object-cover border border-sky-300 shadow-md clickable-photo"
+                       onclick="openPhotoModal('{{ asset('storage/' . $visite->photo) }}', '{{ $visite->visiteur_nom }}')">
+                @else
+                  <div class="w-10 h-10 rounded-full bg-sky-100 flex items-center justify-center text-sky-500 font-bold clickable-photo"
+                       onclick="openPhotoModal(null, '{{ $visite->visiteur_nom }}')">
+                    {{ strtoupper(substr($visite->visiteur_nom, 0, 1)) }}
+                  </div>
+                @endif
+              </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-sky-800">
                 {{ $visite->visiteur_prenom }} {{ $visite->visiteur_nom }}
               </td>
@@ -399,6 +466,16 @@
     </div>
   </main>
   
+  <!-- Modal pour afficher la photo en grand -->
+  <div id="photoModal" class="photo-modal">
+    <div class="close-modal" onclick="closePhotoModal()">
+      <i class="fas fa-times"></i>
+    </div>
+    <div class="modal-content" id="modalContent">
+      <!-- Le contenu sera injecté ici par JavaScript -->
+    </div>
+  </div>
+  
   <!-- Pied de page -->
   <footer class="py-6 bg-white bg-opacity-80 text-center text-sky-700 mt-8">
     <div class="container mx-auto px-4">
@@ -406,5 +483,55 @@
       <p class="text-sm">© 2023 Tous droits réservés</p>
     </div>
   </footer>
+
+  <script>
+    // Fonction pour ouvrir le modal avec la photo
+    function openPhotoModal(photoUrl, nom = '') {
+      const modal = document.getElementById('photoModal');
+      const modalContent = document.getElementById('modalContent');
+      
+      if (photoUrl) {
+        // Cas avec photo réelle
+        modalContent.innerHTML = `
+          <img src="${photoUrl}" 
+               alt="Photo de profil en grand" 
+               class="max-w-full max-h-full rounded-lg shadow-xl">
+        `;
+      } else {
+        // Cas avec initiale
+        const initiale = nom ? nom.charAt(0).toUpperCase() : '';
+        modalContent.innerHTML = `
+          <div class="w-64 h-64 rounded-full bg-sky-100 flex items-center justify-center
+                      text-sky-700 font-bold text-7xl border-4 border-sky-300 shadow-xl">
+            ${initiale}
+          </div>
+        `;
+      }
+      
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden'; // Empêcher le défilement
+    }
+    
+    // Fonction pour fermer le modal
+    function closePhotoModal() {
+      const modal = document.getElementById('photoModal');
+      modal.classList.remove('active');
+      document.body.style.overflow = ''; // Rétablir le défilement
+    }
+    
+    // Fermer la modal en cliquant en dehors de l'image
+    document.getElementById('photoModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closePhotoModal();
+      }
+    });
+    
+    // Fermer avec la touche Échap
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closePhotoModal();
+      }
+    });
+  </script>
 </body>
 </html>

@@ -168,22 +168,11 @@
       </div>
     </div>
     <nav class="flex flex-wrap items-center gap-4 text-sm md:text-base">
-      <a href="{{ url('/accueil') }}" class="flex items-center text-sky-700 hover:text-sky-900 transition group">
-        <span class="mr-1 group-hover:underline">Ajouter visite</span>
+      <a href="{{ url('/home') }}" class="flex items-center text-sky-700 hover:text-sky-900 transition group">
+        <span class="mr-1 group-hover:underline">Accueil</span>
         <i class="fas fa-home text-sky-600"></i>
       </a>
-      <a href="{{ route('locataires.create') }}" class="flex items-center text-sky-700 hover:text-sky-900 transition group">
-        <span class="mr-1 group-hover:underline">Ajouter un locataire</span>
-        <i class="fas fa-user-plus text-sky-600"></i>
-      </a>
-      <a href="{{ url('/visiteurs') }}" class="flex items-center text-sky-700 hover:text-sky-900 transition group">
-        <span class="mr-1 group-hover:underline">Liste des visiteurs</span>
-        <i class="fas fa-list text-sky-600"></i>
-      </a>
-      <a href="{{ route('locataires.index') }}" class="flex items-center text-sky-700 hover:text-sky-900 transition group">
-        <span class="mr-1 group-hover:underline">Liste des locataires</span>
-        <i class="fas fa-users text-sky-600"></i>
-      </a>
+     
     </nav>
   </header>
 

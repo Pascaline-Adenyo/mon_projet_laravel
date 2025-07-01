@@ -3,6 +3,7 @@
  use Illuminate\Support\Facades\Route;
  use App\Http\Controllers\VisiteurController;
  use App\Http\Controllers\LocataireController;
+ use App\Http\Controllers\DashboardController;
 
 // Route::get('/', function () {
 //     return view('accueil');
@@ -60,10 +61,37 @@ Route::get('/locataire/historique/{id}', [LocataireController::class, 'historiqu
 Route::put('/visites/{id}/refuser', [VisiteurController::class, 'refuser'])->name('visite.refuser');
 Route::put('/visites/{id}/bannir', [VisiteurController::class, 'bannir'])->name('visite.bannir');
 Route::get('/notifications/{id}', [VisiteurController::class, 'notifications'])->name('notifications.show');
-Route::get('/home', function () {
-    return view('home');
-})->name('home');
+Route::get('/home', [DashboardController::class, 'index'])->name('home');
+
 Route::redirect('/', '/home');
+
+
+Route::get('/home', [DashboardController::class, 'index'])->name('home');
+Route::get('/locataire_home', [DashboardController::class, 'locataire'])->name('locataire_home');
+Route::get('/admin', [DashboardController::class, 'admin'])->name('admin_home');
+
+// Modification
+Route::get('visiteurs/{visiteur}/edit', [VisiteurController::class, 'edit'])->name('visiteurs.edit');
+
+// Suppression
+Route::delete('visiteurs/{visiteur}', [VisiteurController::class, 'destroy'])->name('visiteurs.destroy');
+
+
+Route::get('/admin/locataires', function () {
+    return view('admin_loca'); // correspond à resources/views/admin_loca.blade.php
+})->name('admin.loca');
+
+use App\Models\Visite;
+
+Route::get('/admin/visites', function () {
+    $visiteurs = Visite::with('locataire')->get();
+    $locataires = Locataire::all(); // ✅ Tu ajoutes cette ligne
+    return view('admin_visit', compact('visiteurs', 'locataires'));
+})->name('admin.visit');
+
+Route::put('/visiteurs/{id}', [VisiteurController::class, 'update'])->name('visiteurs.update');
+
+
 
 
 
